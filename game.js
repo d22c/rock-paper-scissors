@@ -38,8 +38,9 @@ window.onload = function () {
     }
 
     //plays a round, if a tie occurs the function is recursively called until there is a winner
+    //rather than using nested if statements, this function compares the elements' indices in the array
+    //this will allow better for flexibility and maintainability in regards to game and choice expansion in the future 
     function playGame(userSelection, computerSelection) {
-        console.log(userSelection + " & " + computerSelection);
         let userX = options.indexOf(userSelection.toUpperCase());
         let compX = options.indexOf(computerSelection);
 
