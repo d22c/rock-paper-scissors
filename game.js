@@ -38,9 +38,11 @@ window.onload = function () {
     }
 
     //plays a round, if a tie occurs the function is recursively called until there is a winner
+    //returns an array containing a message of who won the round, the user's score, and the computer's score
+
     //rather than using nested if statements, this function compares the elements' indices in the array
     //this will allow better for flexibility and maintainability in regards to game and choice expansion in the future 
-    function playGame(userSelection, computerSelection) {
+    function playRound(userSelection, computerSelection, userScore, computerScore) {
         let userX = options.indexOf(userSelection.toUpperCase());
         let compX = options.indexOf(computerSelection);
 
@@ -48,32 +50,63 @@ window.onload = function () {
             console.log('Tie! Please re-choose.');
             computerSelection = computerPlay();
             userSelection = userPlay();
-            return playGame(userSelection, computerSelection);
+            return playRound(userSelection, computerSelection, userScore, computerScore);
         }
         if ((compX == options.length - 1) && (userX == 0)) {
-            return 'The user wins. ' + userSelection + ' beats ' + computerSelection + '.';
+            userScore++;
+            return ['The user wins. ' + userSelection + ' beats ' + computerSelection + '.', userScore, computerScore];
         }
         if ((userX == options.length - 1) && (compX == 0)) {
-            return 'The computer wins. ' + computerSelection + ' beats ' + userSelection + '.';
+            computerScore++;
+            return ['The computer wins. ' + computerSelection + ' beats ' + userSelection + '.', userScore, computerScore];
         }
         if (userX > compX) {
-            return 'The user wins. ' + userSelection + ' beats ' + computerSelection + '.';
+            userScore++;
+            return ['The user wins. ' + userSelection + ' beats ' + computerSelection + '.', userScore, computerScore];
         }
         else {
-            return 'The computer wins. ' + computerSelection + ' beats ' + userSelection + '.';
+            computerScore++;
+            return ['The computer wins. ' + computerSelection + ' beats ' + userSelection + '.', userScore, computerScore];
         }
 
     }
 
-    let playCheck = prompt('Do you want to play a round of rock, paper, scissors? [Y for yes, any other key for no]');
-    if (playCheck.toUpperCase() == 'Y') {
-        compChoice = computerPlay();
-        userChoice = userPlay();
-        let roundResult = playGame(userChoice, compChoice);
-        console.log(roundResult);
+    function game() {
+
+        let playCheck = prompt('Do you want to play a game (best of 5) of rock, paper, scissors? [Y for yes, any other key for no]');
+        if (playCheck.toUpperCase() == 'Y') {
+            let userScore = 0;
+            let compScore = 0;
+            for (let i = 0; i < 5; i++) {
+                if ((userScore - compScore > 2) || (compScore - userScore > 2)) {
+                    break;
+                }
+
+                compChoice = computerPlay();
+                userChoice = userPlay();
+                let roundResults = playRound(userChoice, compChoice, userScore, compScore);
+                let roundMsg = roundResults[0];
+                userScore = roundResults[1];
+                compScore = roundResults[2];
+                console.log(roundMsg);
+                console.log('Scoreboard: User - ' + userScore + ". Computer - " + compScore + ".");
+            }
+
+            if (userScore > compScore) {
+                console.log('Congrats! You won.');
+            }
+            else {
+                console.log('Sorry. You lost.');
+            }
+
+        }
+        else {
+            console.log('Did not play.');
+        }
+
     }
-    else{
-        console.log('Did not play.');
-    }
+
+    game();
+
 };
 
