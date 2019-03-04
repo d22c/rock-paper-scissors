@@ -26,7 +26,7 @@ window.onload = function () {
     //prompts the user give his selection
     function userPlay() {
         userChoice = prompt('Choose one of the following: ' + options.join(", ") + '.');
-        if (userChoice.toUpperCase() === 'ROCK' || 'PAPER' || 'SCISSORS') {
+        if (userChoice.toUpperCase() === 'ROCK' || userChoice.toUpperCase() === 'PAPER' || userChoice.toUpperCase() === 'SCISSORS') {
             console.log('User Selection: ' + userChoice.toUpperCase());
         }
         else {
@@ -48,10 +48,10 @@ window.onload = function () {
             userSelection = userPlay();
             return playGame(userSelection, computerSelection);
         }
-        if (userX == options.length - 1 && compX == 0) {
+        if ((userX == options.length - 1) && (compX == 0)) {
             return 'The user wins. ' + userSelection + ' beats ' + computerSelection + '.';
         }
-        if (compX == options.length - 1 && userX == 0) {
+        if ((compX == options.length - 1) && (userX == 0)) {
             return 'The computer wins. ' + computerSelection + ' beats ' + userSelection + '.';
         }
         if (userX > compX) {
