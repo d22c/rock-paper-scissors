@@ -1,6 +1,7 @@
 window.onload = function () {
 
-    //array arranged so that each successive element wins against the previous element
+    //array arranged so that each successive element wins against the previous element (note: options[0] wins agains options[options.length-1])
+    //game logic in playGame(x,y) is dependent on array being ordered this way
     let options = ['ROCK', 'PAPER', 'SCISSORS'];
     //initialize user and computer choices to a random element
     let compChoice = 'rock';
@@ -48,10 +49,10 @@ window.onload = function () {
             userSelection = userPlay();
             return playGame(userSelection, computerSelection);
         }
-        if ((userX == options.length - 1) && (compX == 0)) {
+        if ((compX == options.length - 1) && (userX == 0)) {
             return 'The user wins. ' + userSelection + ' beats ' + computerSelection + '.';
         }
-        if ((compX == options.length - 1) && (userX == 0)) {
+        if ((userX == options.length - 1) && (compX == 0)) {
             return 'The computer wins. ' + computerSelection + ' beats ' + userSelection + '.';
         }
         if (userX > compX) {
