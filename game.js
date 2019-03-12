@@ -1,11 +1,18 @@
 window.onload = function () {
-
+    const btns = document.querySelectorAll('button')
+    const compInfo = document.querySelector('.computerInfo');
+    const userInfo = document.querySelector('.playerInfo');
+    const finalTotal = document.querySelector('.finalTotal');
+    const roundResults = document.querySelector('.roundResult');
     //array arranged so that each successive element wins against the previous element (note: options[0] wins agains options[options.length-1])
     //game logic in playGame(x,y) is dependent on array being ordered this way
     let options = ['ROCK', 'PAPER', 'SCISSORS'];
-    //initialize user and computer choices to a random element
-    let compChoice = 'rock';
-    let userChoice = 'rock';
+    //initialize variables to empty strings
+    let compChoice = '';
+    let userChoice = '';
+    let userScore = 0;
+    let compScore = 0;
+    let roundMsg = '';
 
     //generates the computer's selection
     function computerPlay() {
@@ -19,22 +26,9 @@ window.onload = function () {
         else {
             compChoice = 'SCISSORS';
         }
-        console.log('Computer Selection: ' + compChoice);
+        console.log('Computer Choice: ' + compChoice);
         return compChoice;
 
-    }
-
-    //prompts the user give his selection
-    function userPlay() {
-        userChoice = prompt('Choose one of the following: ' + options.join(", ") + '.');
-        if (userChoice.toUpperCase() === 'ROCK' || userChoice.toUpperCase() === 'PAPER' || userChoice.toUpperCase() === 'SCISSORS') {
-            console.log('User Selection: ' + userChoice.toUpperCase());
-        }
-        else {
-            console.log('Invalid selection. Please choose again.');
-            return userPlay();
-        }
-        return userChoice.toUpperCase();
     }
 
     //plays a round, if a tie occurs the function is recursively called until there is a winner
@@ -43,70 +37,60 @@ window.onload = function () {
     //rather than using nested if statements, this function compares the elements' indices in the array
     //this will allow better for flexibility and maintainability in regards to game and choice expansion in the future 
     function playRound(userSelection, computerSelection, userScore, computerScore) {
-        let userX = options.indexOf(userSelection.toUpperCase());
+        let userX = options.indexOf(userSelection);
         let compX = options.indexOf(computerSelection);
 
         if (userX === compX) {
-            console.log('Tie! Please re-choose.');
-            computerSelection = computerPlay();
-            userSelection = userPlay();
-            return playRound(userSelection, computerSelection, userScore, computerScore);
+            roundResults.textContent = 'Tie! Please re-choose.';
+            return['Tie! Please choose again.', userScore, computerScore]
         }
         if ((compX == options.length - 1) && (userX == 0)) {
             userScore++;
-            return ['The user wins. ' + userSelection + ' beats ' + computerSelection + '.', userScore, computerScore];
+            return ['The user wins the round. ' + userSelection + ' beats ' + computerSelection + '.', userScore, computerScore];
         }
         if ((userX == options.length - 1) && (compX == 0)) {
             computerScore++;
-            return ['The computer wins. ' + computerSelection + ' beats ' + userSelection + '.', userScore, computerScore];
+            return ['The computer wins the round. ' + computerSelection + ' beats ' + userSelection + '.', userScore, computerScore];
         }
         if (userX > compX) {
             userScore++;
-            return ['The user wins. ' + userSelection + ' beats ' + computerSelection + '.', userScore, computerScore];
+            return ['The user wins the round. ' + userSelection + ' beats ' + computerSelection + '.', userScore, computerScore];
         }
         else {
             computerScore++;
-            return ['The computer wins. ' + computerSelection + ' beats ' + userSelection + '.', userScore, computerScore];
+            return ['The computer wins the round. ' + computerSelection + ' beats ' + userSelection + '.', userScore, computerScore];
         }
 
     }
 
-    function game() {
+    btns.forEach((button) => {
+        button.addEventListener('click', (e) => {
+            finalTotal.textContent = '';
+            let roundRes = playRound(button.textContent, computerPlay(), userScore, compScore);
+            roundMsg = roundRes[0];
+            userScore = roundRes[1];
+            compScore = roundRes[2];
+            userInfo.textContent = 'User Score: ' + userScore;
+            compInfo.textContent = 'Computer Score: ' + compScore;
+            roundResults.textContent = roundMsg;
+            console.log('Scoreboard: User - ' + userScore + ". Computer - " + compScore + ".");
 
-        let playCheck = prompt('Do you want to play a game (best of 5) of rock, paper, scissors? [Y for yes, any other key for no]');
-        if (playCheck.toUpperCase() == 'Y') {
-            let userScore = 0;
-            let compScore = 0;
-            for (let i = 0; i < 5; i++) {
-                if ((userScore - compScore > 2) || (compScore - userScore > 2)) {
-                    break;
-                }
-
-                compChoice = computerPlay();
-                userChoice = userPlay();
-                let roundResults = playRound(userChoice, compChoice, userScore, compScore);
-                let roundMsg = roundResults[0];
-                userScore = roundResults[1];
-                compScore = roundResults[2];
-                console.log(roundMsg);
-                console.log('Scoreboard: User - ' + userScore + ". Computer - " + compScore + ".");
+            if(userScore==5){
+                finalTotal.textContent = 'Congrats! You won the game.';
+                userScore = 0;
+                compScore = 0;
+            }
+            if(compScore==5){
+                finalTotal.textContent = 'Sorry. You lost the game...';
+                userScore = 0;
+                compScore = 0;
             }
 
-            if (userScore > compScore) {
-                console.log('Congrats! You won.');
-            }
-            else {
-                console.log('Sorry. You lost.');
-            }
+        });
 
-        }
-        else {
-            console.log('Did not play.');
-        }
 
-    }
+    });
 
-    game();
 
 };
 

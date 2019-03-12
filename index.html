@@ -5,10 +5,39 @@
 
     <meta charset="UTF-8">
     <title>
-        Rock, Paper, Scissors
+        Rock | Paper | Scissors
     </title>
-    <script src="game.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+    <div id="container">
+        <div class="titleContainer">
+            <!-- <p class="titleText">Rock | Paper | Scissors</p> -->
+            <div id="icons">
+                <img class="rockIcon" src="img/iconfinder_G12_Rock_87368.png">
+                <img class="paperIcon" src="img/icons8-paper-64.png">
+                <img class="cutIcon" src="img/icons8-cut-64.png">
+            </div>
+        </div>
+        <div class="gamePlay">
+            <p>Enter your choice...</p>
+            <div class="choices">
+                <button class="rockBtn">ROCK</button>
+                <button class="paperBtn">PAPER</button>
+                <button class="cutBtn">SCISSORS</button>
+            </div>
+            <p class="playerInfo"></p>
+            <p class="computerInfo"></p>
+            <p class="roundResult"></p>
+            <p class="finalTotal"></p>
+
+        </div>
+        <!-- Add paragraph with exaggerated storyline of rock, paper, scissors.
+            Make it dramatic-->
+
+    </div>
+    <script src="game.js"></script>
 </body>
+
 </html>
